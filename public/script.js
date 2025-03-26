@@ -1,11 +1,11 @@
-let currentPriceFilter = 0; // 0 means show all, 1 means $, 2 means $$, 3 means $$$
+let currentPriceFilter = 0; // 0 betyr vis alle, 1 betyr vis $, 2 betyr vis $$ & 3 betyr vis $$$
 
 function generateStarRating(rating) {
   const fullStars = Math.floor(rating);
   const halfStar = rating % 1 >= 0.5 ? 1 : 0;
   const emptyStars = 5 - fullStars - halfStar;
 
-  let starHTML = '';
+  let starHTML = "";
   for (let i = 0; i < fullStars; i++) {
     starHTML += '<span class="star">★</span>';
   }
@@ -125,10 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
     }
 
-    // Reload restaurants with current filter
     loadRestaurants();
   });
 
-  // Initial load of restaurants
   loadRestaurants();
 });
