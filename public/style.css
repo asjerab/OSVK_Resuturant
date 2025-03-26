@@ -1,14 +1,9 @@
-@font-face {
-  font-family: Primary;
-  src: url(/public/AeonikTRIAL-Regular.otf);
-}
-
 ::-webkit-scrollbar {
   display: none;
 }
 
 .Primary {
-  font-family: Primary;
+  font-family: sans-serif;
 }
 
 .modal {
