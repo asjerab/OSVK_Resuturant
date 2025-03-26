@@ -28,7 +28,17 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-
+// Endepunkt for å hente restauranter
+app.get("/api/restaurants", (req, res) => {
+  connection.query("SELECT * FROM ResturantInfo", (err, results) => {
+    if (err) {
+      console.error("Feil ved henting av restauranter:", err);
+      res.status(500).json({ error: "Databasefeil" });
+      return;
+    }
+    res.json(results);
+  });
+});
 
 app.use(express.static("public"));
 
