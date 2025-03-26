@@ -4,10 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
     <title>OSVK Resturant velger</title>
   </head>
   <body>
     <main class="mx-auto w-full max-w-[625px] py-[100px] p-[35px]">
+      <div
+        class="modal absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-50 max-w-[738px] h-[700px] bg-white rounded-[16px] p-10 border-3 border-[#EEE]"
+        id="modal"
+      >
+        <nav class="flex items-start justify-between w-full">
+          <h1 class="text-[25px]">Dominos Pizza</h1>
+
+          <button class="cursor-pointer p-1 border-2 hover:bg-[#F5F5F5] active:scale-95 duration-150 ease-in-out border-[#EEE] rounded-[8px]" id="closeModalButton">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </nav>
+      </div>
       <!-- søk og filter knapper for resturanter -->
       <div class="flex flex-col gap-2.5 w-full">
         <nav class="flex flex-col gap-2.5 w-full">
@@ -40,10 +67,11 @@
             $$$
           </button>
         </nav>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 card-container">
           <!-- Restaurant Card 1 -->
           <div
-            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-[0.99] duration-150 ease-in-out"
+            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-95 duration-150 ease-in-out"
+            id="hoverBox"
           >
             <img
               src="./images/Rectangle 3.png"
@@ -139,7 +167,7 @@
           </div>
           <!-- Restaurant Card 2 -->
           <div
-            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-[0.99] duration-150 ease-in-out"
+            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-95 duration-150 ease-in-out"
           >
             <img
               src="./images/Rectangle 3.png"
@@ -235,7 +263,7 @@
           </div>
           <!-- Restaurant Card 3 -->
           <div
-            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-[0.99] duration-150 ease-in-out"
+            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-95 duration-150 ease-in-out"
           >
             <img
               src="./images/Rectangle 3.png"
@@ -331,7 +359,7 @@
           </div>
           <!-- Restaurant Card 4  -->
           <div
-            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-[0.99] duration-150 ease-in-out"
+            class="border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 cursor-pointer hover:scale-95 duration-150 ease-in-out"
           >
             <img
               src="./images/Rectangle 3.png"

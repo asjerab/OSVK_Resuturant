@@ -1,8 +1,22 @@
 @font-face {
   font-family: Primary;
-  src: url(/public/fonts/AeonikTRIAL-Regular.otf);
+  src: url(/public/AeonikTRIAL-Regular.otf);
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 .Primary {
   font-family: Primary;
+}
+
+.modal {
+  display: none;
+}
+
+.card-container {
+  width: 100%;
+  max-height: 500px;
+  overflow-y: scroll;
 }
