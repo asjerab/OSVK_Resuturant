@@ -59,7 +59,7 @@ function loadRestaurants() {
         ) {
           const card = document.createElement("div");
           card.className =
-            "border-3 border-[#EEE] py-5 px-5 rounded-[16px] flex gap-5 hover:scale-95 duration-150 ease-in-out";
+            "border-3 border-[#EEE] py-5 px-5 rounded-[16px] cursor-pointer flex gap-5 hover:scale-95 duration-150 ease-in-out";
           card.setAttribute("data-restaurant-id", restaurant.id);
 
           card.innerHTML += `
@@ -100,6 +100,23 @@ function loadRestaurants() {
     .catch((error) =>
       console.error("Feil ved henting av restauranter:", error)
     );
+}
+
+function showRestaurantModal(restaurant) {
+  const modal = document.getElementById("modal");
+  const closeModalButton = document.getElementById("closeModalButton");
+
+  // Oppdater modalinnholdet med restaurantinformasjon
+  modal.querySelector("h1").textContent = restaurant.resturantNavn;
+  // Legg til mer informasjon om restauranten her om nødvendig
+
+  // Vis modalen
+  modal.style.display = "block";
+
+  // Lukk modal når knappen klikkes
+  closeModalButton.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
