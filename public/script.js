@@ -76,14 +76,15 @@ function loadRestaurants() {
                 </p>
               </div>
               <div class="w-fit flex flex-col gap-1">
-                <p class="Primary flex justify-end">Åpner kl: ${restaurant.resturantTider
-            }</p>
+                <p class="Primary flex justify-end">Åpner kl: ${
+                  restaurant.resturantTider
+                }</p>
                 <div class="flex items-center">
                   ${generateStarRating(restaurant.rating || 3)}
                 </div>
                 <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
-              restaurantPriceLevel
-            )}</p>
+                  restaurantPriceLevel
+                )}</p>
               </div>
             </div>
           `;
@@ -105,21 +106,25 @@ function showRestaurantModal(restaurant, resturantID) {
   const modal = document.getElementById("modal");
   const closeModalButton = document.getElementById("closeModalButton");
 
-
   fetch("/api/reviews/" + resturantID)
     .then((response) => response.json())
     .then((reviews) => {
-      let reviewHolder = document.getElementsByClassName("reviews")[0]
-      reviewHolder.innerHTML = ""
+      let reviewHolder = document.getElementsByClassName("reviews")[0];
+      reviewHolder.innerHTML = "";
       reviews.forEach((review) => {
         reviewHolder.innerHTML += `
-          <h1 class="reviewStars">${review.ReviewValue}</h1>
-          <h1 class="reviewDesc">${review.ReviewDesc}</h1>
-          <h1 class="reviewDate">${review.ReviewDate}}</h1>
+          <h1 class="text-[25px] my-5 font-bold">Andmeldelser </h1> 
+          <span class="text-[18px] font-bold">Antall stjerner: </span> 
+          <h1 class="reviewStars border-2 border-[#EEE] p-1 px-3 my-3 rounded-full w-fit">${review.ReviewValue}</h1>
+          <span class="text-[18px] font-bold">Beskrivelse: </span> 
+          <h1 class="reviewDesc my-3">${review.ReviewDesc}</h1>
+          <span class="text-[18px] font-bold">Anmeldelsesdato: </span> 
+          <h1 class="reviewDate my-3">${review.ReviewDate}</h1>
+          <span class="text-[18px] font-bold">Skrevet av: </span> 
           <h1 class="Reviewer">${review.SubmitterName}</h1>
-        `
-      })
-    })
+        `;
+      });
+    });
 
   // Oppdater modalinnholdet med restaurantinformasjon
   modal.querySelector("h1").textContent = restaurant.resturantNavn;
