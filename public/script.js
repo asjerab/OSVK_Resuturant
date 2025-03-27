@@ -13,7 +13,7 @@ function generateStarRating(rating) {
     starHTML += '<span class="star">½</span>';
   }
   for (let i = 0; i < emptyStars; i++) {
-    starHTML += '<span class="star empty">★</span>';
+    starHTML += '<span class="star empty">☆</span>';
   }
   return starHTML;
 }
@@ -38,20 +38,9 @@ function loadRestaurants() {
       const cardsContainer = document.getElementById("cards");
       cardsContainer.innerHTML = "";
 
-      console.log("Current Price Filter:", currentPriceFilter);
-      console.log("Restaurants:", restaurants);
-
       restaurants.forEach((restaurant) => {
         // Use priceRange instead of price_level
         const restaurantPriceLevel = restaurant.priceRange || 1;
-
-        console.log(
-          "Restaurant Price Level:",
-          restaurantPriceLevel,
-          "Type:",
-          typeof restaurantPriceLevel
-        );
-
         // Improved filtering logic
         if (
           currentPriceFilter === 0 ||
@@ -76,15 +65,14 @@ function loadRestaurants() {
                 </p>
               </div>
               <div class="w-fit flex flex-col gap-1">
-                <p class="Primary flex justify-end">Åpner kl: ${
-                  restaurant.resturantTider
-                }</p>
+                <p class="Primary flex justify-end">Åpner kl: ${restaurant.resturantTider
+            }</p>
                 <div class="flex items-center">
                   ${generateStarRating(restaurant.rating || 3)}
                 </div>
                 <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
-                  restaurantPriceLevel
-                )}</p>
+              restaurantPriceLevel
+            )}</p>
               </div>
             </div>
           `;
@@ -167,3 +155,68 @@ document.addEventListener("DOMContentLoaded", function () {
 
   loadRestaurants();
 });
+
+
+document.getElementById("Sokefelt").addEventListener("input", (event) => {
+  let text = event.target.value
+  fetch("/api/restaurants")
+    .then((response) => response.json())
+    .then((restaurants) => {
+      const cardsContainer = document.getElementById("cards");
+      cardsContainer.innerHTML = "";
+
+      restaurants.forEach((restaurant) => {
+        if (restaurant.resturantNavn.toUpperCase().includes(text.toUpperCase())) {
+          
+        } else {
+          return
+        }
+        // Use priceRange instead of price_level
+        const restaurantPriceLevel = restaurant.priceRange || 1;
+        // Improved filtering logic
+        if (
+          currentPriceFilter === 0 ||
+          restaurantPriceLevel === currentPriceFilter
+        ) {
+          const card = document.createElement("div");
+          card.className =
+            "border-3 border-[#EEE] py-5 px-5 rounded-[16px] cursor-pointer flex gap-5 hover:scale-95 duration-150 ease-in-out";
+          card.setAttribute("data-restaurant-id", restaurant.id);
+
+          card.innerHTML += `
+          <img
+            src="./images/Rectangle 3.png"
+            class="w-full max-w-[80px] h-[80px]"
+            alt="${restaurant.resturantNavn}"
+          />
+          <div class="flex items-center justify-between w-full">
+            <div>
+              <h1 class="text-[18px] Primary">${restaurant.resturantNavn}</h1>
+              <p class="Primary text-[12px] text-[#4E4E4E]">
+                ${restaurant.adresse}
+              </p>
+            </div>
+            <div class="w-fit flex flex-col gap-1">
+              <p class="Primary flex justify-end">Åpner kl: ${restaurant.resturantTider
+            }</p>
+              <div class="flex items-center">
+                ${generateStarRating(restaurant.rating || 3)}
+              </div>
+              <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
+              restaurantPriceLevel
+            )}</p>
+            </div>
+          </div>
+        `;
+
+          card.addEventListener("click", () => {
+            showRestaurantModal(restaurant, restaurant.ID);
+          });
+
+          cardsContainer.appendChild(card);
+        }
+      });
+    })
+
+
+})
