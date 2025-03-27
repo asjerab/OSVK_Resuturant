@@ -21,7 +21,7 @@ connection.connect((err) => {
   }
   console.log("Connected to database!");
 });
-const PORT = process.env.PORT || 13001;
+  const PORT = process.env.PORT || 13001;
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 
 app.get("/", (req, res) => {
@@ -47,6 +47,21 @@ app.get("/api/reviews/:resturants", (req, res) => {
       return;
     }
     res.json(results);
+  });
+});
+
+// Endepunkt for å lagre anmeldelser
+app.post("/api/reviews", (req, res) => {
+  const { restaurantId, ReviewValue, ReviewDesc, ReviewDate, SubmitterName } = req.body;
+
+  const query = `INSERT INTO Reviews (Resturant, ReviewValue, ReviewDesc, ReviewDate, SubmitterName) VALUES (?, ?, ?, ?, ?)`;
+  connection.query(query, [restaurantId, ReviewValue, ReviewDesc, ReviewDate, SubmitterName], (err, results) => {
+    if (err) {
+      console.error("Feil ved lagring av anmeldelse:", err);
+      res.status(500).json({ error: "Databasefeil" });
+      return;
+    }
+    res.status(201).json({ message: "Anmeldelse lagret!", id: results.insertId });
   });
 });
 

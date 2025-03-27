@@ -8,6 +8,7 @@
 
 .modal {
   display: none;
+  overflow-x: scroll;
 }
 
 .card-container {

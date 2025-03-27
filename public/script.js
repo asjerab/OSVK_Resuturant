@@ -93,6 +93,10 @@ function loadRestaurants() {
 function showRestaurantModal(restaurant, resturantID) {
   const modal = document.getElementById("modal");
   const closeModalButton = document.getElementById("closeModalButton");
+  
+  // Sett restaurant-ID i det skjulte feltet
+  const hiddenRestaurantIdInput = modal.querySelector("#restaurantId");
+  hiddenRestaurantIdInput.value = resturantID;
 
   fetch("/api/reviews/" + resturantID)
     .then((response) => response.json())
@@ -101,22 +105,21 @@ function showRestaurantModal(restaurant, resturantID) {
       reviewHolder.innerHTML = "";
       reviews.forEach((review) => {
         reviewHolder.innerHTML += `
-          <h1 class="text-[25px] my-5 font-bold">Andmeldelser </h1> 
-          <span class="text-[18px] font-bold">Antall stjerner: </span> 
+          <span class="text-[18px] font-bold pt-[200px]">Antall stjerner: </span> 
           <h1 class="reviewStars border-2 border-[#EEE] p-1 px-3 my-3 rounded-full w-fit">${review.ReviewValue}</h1>
           <span class="text-[18px] font-bold">Beskrivelse: </span> 
           <h1 class="reviewDesc my-3">${review.ReviewDesc}</h1>
           <span class="text-[18px] font-bold">Anmeldelsesdato: </span> 
           <h1 class="reviewDate my-3">${review.ReviewDate}</h1>
           <span class="text-[18px] font-bold">Skrevet av: </span> 
-          <h1 class="Reviewer">${review.SubmitterName}</h1>
+          <h1 class="Reviewer pb-[25px]">${review.SubmitterName}</h1>
+          <hr class="pt-[25px] opacity-50"/>
         `;
       });
     });
 
   // Oppdater modalinnholdet med restaurantinformasjon
   modal.querySelector("h1").textContent = restaurant.resturantNavn;
-  // Legg til mer informasjon om restauranten her om nødvendig
 
   // Vis modalen
   modal.style.display = "block";
@@ -126,6 +129,29 @@ function showRestaurantModal(restaurant, resturantID) {
     modal.style.display = "none";
   });
 }
+
+// Legg til en funksjon for å håndtere innsending av anmeldelsen
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault(); // Forhindre standard innsending
+
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData.entries());
+
+  fetch("/api/reviews", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(result => {
+    console.log("Anmeldelse sendt:", result);
+    // Lukk modalen etter innsending
+    document.getElementById("modal").style.display = "none";
+  })
+  .catch(error => console.error("Feil ved innsending av anmeldelse:", error));
+});
 
 document.addEventListener("DOMContentLoaded", function () {
   let filterButton = document.getElementById("filterButton");
