@@ -110,6 +110,7 @@ function showRestaurantModal(restaurant, resturantID) {
     .then((response) => response.json())
     .then((reviews) => {
       let reviewHolder = document.getElementsByClassName("reviews")[0]
+      reviewHolder.innerHTML = ""
       reviews.forEach((review) => {
         reviewHolder.innerHTML += `
           <h1 class="reviewStars">${review.ReviewValue}</h1>
