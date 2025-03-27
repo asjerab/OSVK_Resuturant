@@ -76,21 +76,20 @@ function loadRestaurants() {
                 </p>
               </div>
               <div class="w-fit flex flex-col gap-1">
-                <p class="Primary flex justify-end">Åpner kl: ${
-                  restaurant.resturantTider
-                }</p>
+                <p class="Primary flex justify-end">Åpner kl: ${restaurant.resturantTider
+            }</p>
                 <div class="flex items-center">
-                  ${generateStarRating(restaurant.rating || 0)}
+                  ${generateStarRating(restaurant.rating || 3)}
                 </div>
                 <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
-                  restaurantPriceLevel
-                )}</p>
+              restaurantPriceLevel
+            )}</p>
               </div>
             </div>
           `;
 
           card.addEventListener("click", () => {
-            showRestaurantModal(restaurant);
+            showRestaurantModal(restaurant, restaurant.ID);
           });
 
           cardsContainer.appendChild(card);
@@ -102,9 +101,24 @@ function loadRestaurants() {
     );
 }
 
-function showRestaurantModal(restaurant) {
+function showRestaurantModal(restaurant, resturantID) {
   const modal = document.getElementById("modal");
   const closeModalButton = document.getElementById("closeModalButton");
+
+
+  fetch("/api/reviews/" + resturantID)
+    .then((response) => response.json())
+    .then((reviews) => {
+      let reviewHolder = document.getElementsByClassName("reviews")[0]
+      reviews.forEach((review) => {
+        reviewHolder.innerHTML += `
+          <h1 class="reviewStars">${review.ReviewValue}</h1>
+          <h1 class="reviewDesc">${review.ReviewDesc}</h1>
+          <h1 class="reviewDate">${review.ReviewDate}}</h1>
+          <h1 class="Reviewer">${review.SubmitterName}</h1>
+        `
+      })
+    })
 
   // Oppdater modalinnholdet med restaurantinformasjon
   modal.querySelector("h1").textContent = restaurant.resturantNavn;

@@ -39,6 +39,16 @@ app.get("/api/restaurants", (req, res) => {
     res.json(results);
   });
 });
+app.get("/api/reviews/:resturants", (req, res) => {
+  connection.query(`SELECT * FROM Reviews WHERE Resturant=${req.params.resturants}`, (err, results) => {
+    if (err) {
+      console.error("Feil ved henting av restauranter:", err);
+      res.status(500).json({ error: "Databasefeil" });
+      return;
+    }
+    res.json(results);
+  });
+});
 
 app.use(express.static("public"));
 
