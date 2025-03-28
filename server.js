@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 
 // Endepunkt for å hente restauranter
 app.get("/api/restaurants", (req, res) => {
-  connection.query("SELECT * FROM ResturantInfo", (err, results) => {
+  connection.query(`SELECT * FROM ${process.env.DB}.ResturantInfo`, (err, results) => {
     if (err) {
       console.error("Feil ved henting av restauranter:", err);
       res.status(500).json({ error: "Databasefeil" });
@@ -40,7 +40,7 @@ app.get("/api/restaurants", (req, res) => {
   });
 });
 app.get("/api/reviews/:resturants", (req, res) => {
-  connection.query(`SELECT * FROM Reviews WHERE Resturant=${req.params.resturants}`, (err, results) => {
+  connection.query(`SELECT * FROM ${process.env.DB}.Reviews WHERE Resturant=${req.params.resturants}`, (err, results) => {
     if (err) {
       console.error("Feil ved henting av restauranter:", err);
       res.status(500).json({ error: "Databasefeil" });
@@ -50,7 +50,7 @@ app.get("/api/reviews/:resturants", (req, res) => {
   });
 });
 app.get("/api/all/reviews/", (req, res) => {
-  connection.query(`SELECT * FROM Reviews`, (err, results) => {
+  connection.query(`SELECT * FROM ${process.env.DB}.Reviews`, (err, results) => {
     if (err) {
       console.error("Feil ved henting av restauranter:", err);
       res.status(500).json({ error: "Databasefeil" });

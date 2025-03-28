@@ -46,9 +46,9 @@ async function loadRestaurants() {
     let sum = 0
     let Datalength = 0
     reviews.forEach((review) => {
-      if(restaurant.ID == review.Resturant) {
+      if (restaurant.ID == review.Resturant) {
         sum += parseInt(review.ReviewValue)
-        Datalength ++
+        Datalength++
       }
     })
     if (sum != 0) {
@@ -195,66 +195,79 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-document.getElementById("Sokefelt").addEventListener("input", (event) => {
+document.getElementById("Sokefelt").addEventListener("input", async (event) => {
   let text = event.target.value
-  fetch("/api/restaurants")
-    .then((response) => response.json())
-    .then((restaurants) => {
-      const cardsContainer = document.getElementById("cards");
-      cardsContainer.innerHTML = "";
+  let response = await fetch("/api/restaurants")
+  let restaurants = await response.json()
 
-      restaurants.forEach((restaurant) => {
-        if (restaurant.resturantNavn.toUpperCase().includes(text.toUpperCase())) {
+  const cardsContainer = document.getElementById("cards");
+  cardsContainer.innerHTML = "";
 
-        } else {
-          return
-        }
-        // Use priceRange instead of price_level
-        const restaurantPriceLevel = restaurant.priceRange || 1;
-        // Improved filtering logic
-        if (
-          currentPriceFilter === 0 ||
-          restaurantPriceLevel === currentPriceFilter
-        ) {
-          const card = document.createElement("div");
-          card.className =
-            "border-3 border-[#EEE] py-5 px-5 rounded-[16px] cursor-pointer flex gap-5 hover:scale-95 duration-150 ease-in-out";
-          card.setAttribute("data-restaurant-id", restaurant.id);
+  let reviewResponse = await fetch("/api/all/reviews/")
+  let reviews = await reviewResponse.json()
 
-          card.innerHTML += `
-          <img
-            src="./images/Rectangle 3.png"
-            class="w-full max-w-[80px] h-[80px]"
-            alt="${restaurant.resturantNavn}"
-          />
-          <div class="flex items-center justify-between w-full">
-            <div>
-              <h1 class="text-[18px] Primary">${restaurant.resturantNavn}</h1>
-              <p class="Primary text-[12px] text-[#4E4E4E]">
-                ${restaurant.adresse}
-              </p>
-            </div>
-            <div class="w-fit flex flex-col gap-1">
-              <p class="Primary flex justify-end">Åpner kl: ${restaurant.resturantTider
-            }</p>
-              <div class="flex items-center">
-                ${generateStarRating(restaurant.rating || 3)}
-              </div>
-              <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
-              restaurantPriceLevel
-            )}</p>
-            </div>
-          </div>
-        `;
 
-          card.addEventListener("click", () => {
-            showRestaurantModal(restaurant, restaurant.ID);
-          });
+  restaurants.forEach((restaurant) => {
+    if (restaurant.resturantNavn.toUpperCase().includes(text.toUpperCase())) {
 
-          cardsContainer.appendChild(card);
-        }
-      });
+    } else {
+      return
+    }
+    let sum = 0
+    let Datalength = 0
+    reviews.forEach((review) => {
+      if (restaurant.ID == review.Resturant) {
+        sum += parseInt(review.ReviewValue)
+        Datalength++
+      }
     })
+    if (sum != 0) {
+      sum = sum / Datalength
+    }
+    // Use priceRange instead of price_level
+    const restaurantPriceLevel = restaurant.priceRange || 1;
+    // Improved filtering logic
+    if (
+      currentPriceFilter === 0 ||
+      restaurantPriceLevel === currentPriceFilter
+    ) {
+      const card = document.createElement("div");
+      card.className =
+        "border-3 border-[#EEE] py-5 px-5 rounded-[16px] cursor-pointer flex gap-5 hover:scale-95 duration-150 ease-in-out";
+      card.setAttribute("data-restaurant-id", restaurant.id);
 
+      card.innerHTML += `
+            <img
+              src="./images/Rectangle 3.png"
+              class="w-full max-w-[80px] h-[80px]"
+              alt="${restaurant.resturantNavn}"
+            />
+            <div class="flex items-center justify-between w-full">
+              <div>
+                <h1 class="text-[18px] Primary">${restaurant.resturantNavn}</h1>
+                <p class="Primary text-[12px] text-[#4E4E4E]">
+                  ${restaurant.adresse}
+                </p>
+              </div>
+              <div class="w-fit flex flex-col gap-1">
+                <p class="Primary flex justify-end">Åpner kl: ${restaurant.resturantTider
+        }</p>
+                <div class="flex items-center">
+                  ${generateStarRating(sum || 0)}
+                </div>
+                <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
+          restaurantPriceLevel
+        )}</p>
+              </div>
+            </div>
+          `;
 
+      card.addEventListener("click", () => {
+        showRestaurantModal(restaurant, restaurant.ID);
+      });
+
+      cardsContainer.appendChild(card);
+    }
+
+  })
 })
