@@ -72,7 +72,7 @@ async function loadRestaurants() {
               class="w-full max-w-[80px] h-[80px]"
               alt="${restaurant.resturantNavn}"
             />
-            <div class="flex items-center justify-between w-full">
+            <div class="leftResturantBox flex items-center justify-between w-full">
               <div>
                 <h1 class="text-[18px] Primary">${restaurant.resturantNavn}</h1>
                 <p class="Primary text-[12px] text-[#4E4E4E]">
@@ -85,7 +85,7 @@ async function loadRestaurants() {
                 <div class="flex items-center">
                   ${generateStarRating(sum || 0)}
                 </div>
-                <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
+                <p class="flex justify-start Primary text-[#4E4E4E]">${getPriceLevel(
           restaurantPriceLevel
         )}</p>
               </div>
