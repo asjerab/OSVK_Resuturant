@@ -49,6 +49,16 @@ app.get("/api/reviews/:resturants", (req, res) => {
     res.json(results);
   });
 });
+app.get("/api/all/reviews/", (req, res) => {
+  connection.query(`SELECT * FROM Reviews`, (err, results) => {
+    if (err) {
+      console.error("Feil ved henting av restauranter:", err);
+      res.status(500).json({ error: "Databasefeil" });
+      return;
+    }
+    res.json(results);
+  });
+});
 
 // Endepunkt for å lagre anmeldelser
 app.post("/api/reviews", (req, res) => {

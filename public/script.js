@@ -31,27 +31,42 @@ function getPriceLevel(level) {
   }
 }
 
-function loadRestaurants() {
-  fetch("/api/restaurants")
-    .then((response) => response.json())
-    .then((restaurants) => {
-      const cardsContainer = document.getElementById("cards");
-      cardsContainer.innerHTML = "";
+async function loadRestaurants() {
+  let response = await fetch("/api/restaurants")
+  let restaurants = await response.json()
 
-      restaurants.forEach((restaurant) => {
-        // Use priceRange instead of price_level
-        const restaurantPriceLevel = restaurant.priceRange || 1;
-        // Improved filtering logic
-        if (
-          currentPriceFilter === 0 ||
-          restaurantPriceLevel === currentPriceFilter
-        ) {
-          const card = document.createElement("div");
-          card.className =
-            "border-3 border-[#EEE] py-5 px-5 rounded-[16px] cursor-pointer flex gap-5 hover:scale-95 duration-150 ease-in-out";
-          card.setAttribute("data-restaurant-id", restaurant.id);
+  const cardsContainer = document.getElementById("cards");
+  cardsContainer.innerHTML = "";
 
-          card.innerHTML += `
+  let reviewResponse = await fetch("/api/all/reviews/")
+  let reviews = await reviewResponse.json()
+
+
+  restaurants.forEach((restaurant) => {
+    let sum = 0
+    let Datalength = 0
+    reviews.forEach((review) => {
+      if(restaurant.ID == review.Resturant) {
+        sum += parseInt(review.ReviewValue)
+        Datalength ++
+      }
+    })
+    if (sum != 0) {
+      sum = sum / Datalength
+    }
+    // Use priceRange instead of price_level
+    const restaurantPriceLevel = restaurant.priceRange || 1;
+    // Improved filtering logic
+    if (
+      currentPriceFilter === 0 ||
+      restaurantPriceLevel === currentPriceFilter
+    ) {
+      const card = document.createElement("div");
+      card.className =
+        "border-3 border-[#EEE] py-5 px-5 rounded-[16px] cursor-pointer flex gap-5 hover:scale-95 duration-150 ease-in-out";
+      card.setAttribute("data-restaurant-id", restaurant.id);
+
+      card.innerHTML += `
             <img
               src="./images/Rectangle 3.png"
               class="w-full max-w-[80px] h-[80px]"
@@ -66,34 +81,31 @@ function loadRestaurants() {
               </div>
               <div class="w-fit flex flex-col gap-1">
                 <p class="Primary flex justify-end">Åpner kl: ${restaurant.resturantTider
-            }</p>
+        }</p>
                 <div class="flex items-center">
-                  ${generateStarRating(restaurant.rating || 3)}
+                  ${generateStarRating(sum || 0)}
                 </div>
                 <p class="flex justify-end Primary text-[#4E4E4E]">${getPriceLevel(
-              restaurantPriceLevel
-            )}</p>
+          restaurantPriceLevel
+        )}</p>
               </div>
             </div>
           `;
 
-          card.addEventListener("click", () => {
-            showRestaurantModal(restaurant, restaurant.ID);
-          });
-
-          cardsContainer.appendChild(card);
-        }
+      card.addEventListener("click", () => {
+        showRestaurantModal(restaurant, restaurant.ID);
       });
-    })
-    .catch((error) =>
-      console.error("Feil ved henting av restauranter:", error)
-    );
+
+      cardsContainer.appendChild(card);
+    }
+  });
+
 }
 
 function showRestaurantModal(restaurant, resturantID) {
   const modal = document.getElementById("modal");
   const closeModalButton = document.getElementById("closeModalButton");
-  
+
   // Sett restaurant-ID i det skjulte feltet
   const hiddenRestaurantIdInput = modal.querySelector("#restaurantId");
   hiddenRestaurantIdInput.value = resturantID;
@@ -144,13 +156,13 @@ document.querySelector("form").addEventListener("submit", (event) => {
     },
     body: JSON.stringify(data),
   })
-  .then(response => response.json())
-  .then(result => {
-    console.log("Anmeldelse sendt:", result);
-    // Lukk modalen etter innsending
-    document.getElementById("modal").style.display = "none";
-  })
-  .catch(error => console.error("Feil ved innsending av anmeldelse:", error));
+    .then(response => response.json())
+    .then(result => {
+      console.log("Anmeldelse sendt:", result);
+      // Lukk modalen etter innsending
+      document.getElementById("modal").style.display = "none";
+    })
+    .catch(error => console.error("Feil ved innsending av anmeldelse:", error));
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -193,7 +205,7 @@ document.getElementById("Sokefelt").addEventListener("input", (event) => {
 
       restaurants.forEach((restaurant) => {
         if (restaurant.resturantNavn.toUpperCase().includes(text.toUpperCase())) {
-          
+
         } else {
           return
         }
